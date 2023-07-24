@@ -420,7 +420,11 @@ impl Decoder {
     pub fn get_picture(&mut self) -> Result<Picture, Error> {
         unsafe {
             let mut pic: Dav1dPicture = mem::zeroed();
-            let ret = dav1d_get_picture(self.dec.as_ptr(), &mut pic);
+            let mut ret = -11;
+
+            while ret == -11 {
+                ret = dav1d_get_picture(self.dec.as_ptr(), &mut pic);
+            }
 
             if ret < 0 {
                 Err(Error::from(ret))
